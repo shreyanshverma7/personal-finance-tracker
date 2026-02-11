@@ -1,36 +1,82 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Personal Finance Tracker
 
-## Getting Started
+Full-stack web app for manually tracking income/expenses, viewing spending insights, and managing budgets. Built for a small trusted user base (5-10 people). Currency: INR (₹).
 
-First, run the development server:
+## Tech Stack
+
+- **Framework**: Next.js 15 (App Router), React 18, TypeScript
+- **Styling**: Tailwind CSS v4, shadcn/ui (Radix primitives)
+- **Database**: Prisma 5 + SQLite
+- **Auth**: NextAuth.js v4 (credentials provider, JWT strategy)
+- **Forms**: react-hook-form + Zod + @hookform/resolvers
+- **Charts**: Recharts
+- **Other**: date-fns, lucide-react (icons), sonner (toasts), next-themes (dark mode)
+
+## Commands
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run dev        # Start dev server (localhost:3000)
+npm run build      # Production build (also runs lint + typecheck)
+npm run lint       # ESLint
+npx prisma migrate dev --name <name>   # Create/apply migration
+npx prisma generate                     # Regenerate Prisma client
+npx prisma studio                       # Database GUI (localhost:5555)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+No test framework is configured yet.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+src/
+├── app/
+│   ├── (auth)/          # Public: login, register (centered layout)
+│   ├── (dashboard)/     # Protected: dashboard, transactions, categories, settings
+│   └── api/             # REST endpoints: auth, transactions, categories, dashboard
+├── components/
+│   ├── ui/              # shadcn/ui primitives (DO NOT edit manually)
+│   ├── forms/           # Auth forms (login, register)
+│   ├── layout/          # Sidebar, mobile nav, theme toggle
+│   ├── transactions/    # Transaction list, dialog, delete dialog
+│   ├── dashboard/       # Stats card, dashboard content
+│   └── charts/          # Recharts wrappers (pie, line)
+├── lib/
+│   ├── auth.ts          # NextAuth config
+│   ├── auth-utils.ts    # getCurrentUser(), requireAuth()
+│   ├── db.ts            # Prisma singleton
+│   ├── validators.ts    # Zod schemas + inferred types
+│   └── utils.ts         # cn(), formatCurrency(), formatDate()
+├── types/               # TypeScript interfaces, NextAuth augmentation
+└── middleware.ts         # Route protection matcher
+prisma/
+└── schema.prisma        # User, Transaction, Category, Budget models
+```
 
-## Learn More
+## Key Conventions
 
-To learn more about Next.js, take a look at the following resources:
+- **Route groups**: `(auth)` = public, `(dashboard)` = protected via `requireAuth()` in layout
+- **API auth**: Every protected route calls `getServerSession(authOptions)` first
+- **Data scoping**: All queries filter by `session.user.id` — no cross-user access
+- **Validation**: API routes use `transactionSchema` (with `z.coerce`), forms use `transactionFormSchema` (strict types) — both in `src/lib/validators.ts`
+- **Client fetching**: No React Query — uses `useEffect` + `fetch` + `refreshKey` counter for re-fetches after mutations
+- **Next.js 15 params**: Route handler params are `Promise`-based — must `await params`
+- **SQLite**: No enums — `type` fields are strings (`"INCOME"` | `"EXPENSE"`)
+- **shadcn/ui components** in `src/components/ui/` are generated — add new ones with `npx shadcn@latest add <name>`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Environment
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Copy `.env.example` to `.env`. Required variables:
 
-## Deploy on Vercel
+- `DATABASE_URL` — SQLite path (default: `file:./dev.db`)
+- `NEXTAUTH_SECRET` — Session encryption key
+- `NEXTAUTH_URL` — App URL (default: `http://localhost:3000`)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Phase 2 (Deferred)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Account model, budget tracking UI, data export.
+
+## Additional Documentation
+
+Check these files for detailed patterns when modifying the codebase:
+
+- **`.claude/docs/architectural_patterns.md`** — API route structure, form patterns, auth flow, data fetching, component composition, database conventions, theming setup
