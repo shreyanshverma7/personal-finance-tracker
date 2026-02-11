@@ -178,6 +178,7 @@ export function TransactionDialog({
                       step="0.01"
                       placeholder="0.00"
                       {...field}
+                      value={field.value === 0 ? "" : field.value}
                       onChange={(e) => field.onChange(e.target.value === "" ? 0 : parseFloat(e.target.value))}
                     />
                   </FormControl>
