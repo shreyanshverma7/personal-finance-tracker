@@ -14,6 +14,9 @@ const DEFAULT_CATEGORIES = [
   { name: "Shopping", type: "EXPENSE", color: "#ec4899" },
   { name: "Entertainment", type: "EXPENSE", color: "#8b5cf6" },
   { name: "Healthcare", type: "EXPENSE", color: "#06b6d4" },
+  { name: "Rent", type: "EXPENSE", color: "#0ea5e9" },
+  { name: "Groceries", type: "EXPENSE", color: "#84cc16" },
+  { name: "Credit Card & Loan", type: "EXPENSE", color: "#f43f5e" },
   { name: "Other Expense", type: "EXPENSE", color: "#64748b" },
 ];
 
