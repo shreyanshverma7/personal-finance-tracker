@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Finance Tracker",
+  title: "myRupaiya",
   description: "Personal finance tracker for managing income and expenses",
 };
 

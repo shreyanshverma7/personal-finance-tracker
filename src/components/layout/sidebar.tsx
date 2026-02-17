@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
@@ -9,7 +10,6 @@ import {
   Tag,
   Settings,
   LogOut,
-  Wallet,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -27,10 +27,15 @@ export function Sidebar() {
 
   return (
     <div className="flex h-full w-64 flex-col border-r bg-card">
-      <div className="flex h-14 items-center gap-2 border-b px-4">
-        <Wallet className="h-6 w-6 text-primary" />
-        <span className="text-lg font-semibold">Finance Tracker</span>
-      </div>
+      <Link href="/dashboard" className="flex h-14 items-center border-b px-4">
+        <Image
+          src="/images/myRupaiyalogo.png"
+          alt="myRupaiya"
+          width={140}
+          height={36}
+          priority
+        />
+      </Link>
       <nav className="flex-1 space-y-1 p-3">
         {navItems.map((item) => (
           <Link
