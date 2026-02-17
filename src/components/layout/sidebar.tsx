@@ -27,12 +27,13 @@ export function Sidebar() {
 
   return (
     <div className="flex h-full w-64 flex-col border-r bg-card">
-      <Link href="/dashboard" className="flex h-14 items-center border-b px-4">
+      <Link href="/dashboard" className="flex h-14 items-center justify-center border-b px-4">
         <Image
           src="/images/myRupaiyalogo.png"
           alt="myRupaiya"
-          width={140}
-          height={36}
+          width={130}
+          height={34}
+          className="object-contain"
           priority
         />
       </Link>
