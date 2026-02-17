@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
@@ -11,7 +12,6 @@ import {
   Settings,
   LogOut,
   Menu,
-  Wallet,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -31,10 +31,15 @@ export function MobileNav() {
 
   return (
     <div className="flex h-14 items-center justify-between border-b px-4 md:hidden">
-      <div className="flex items-center gap-2">
-        <Wallet className="h-6 w-6 text-primary" />
-        <span className="text-lg font-semibold">Finance Tracker</span>
-      </div>
+      <Link href="/dashboard">
+        <Image
+          src="/images/myRupaiyalogo.png"
+          alt="myRupaiya"
+          width={120}
+          height={32}
+          priority
+        />
+      </Link>
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger asChild>
           <Button variant="ghost" size="icon">
@@ -42,10 +47,14 @@ export function MobileNav() {
           </Button>
         </SheetTrigger>
         <SheetContent side="left" className="w-64 p-0">
-          <div className="flex h-14 items-center gap-2 border-b px-4">
-            <Wallet className="h-6 w-6 text-primary" />
-            <span className="text-lg font-semibold">Finance Tracker</span>
-          </div>
+          <Link href="/dashboard" onClick={() => setOpen(false)} className="flex h-14 items-center border-b px-4">
+            <Image
+              src="/images/myRupaiyalogo.png"
+              alt="myRupaiya"
+              width={120}
+              height={32}
+            />
+          </Link>
           <nav className="flex-1 space-y-1 p-3">
             {navItems.map((item) => (
               <Link
