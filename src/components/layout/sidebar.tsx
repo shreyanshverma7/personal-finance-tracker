@@ -27,8 +27,10 @@ export function Sidebar() {
 
   return (
     <div className="flex h-full w-64 flex-col border-r bg-card">
-      <div className="flex h-14 items-center border-b px-4">
+      <div className="group/logo relative flex h-14 items-center justify-center px-4">
         <Logo />
+        <span className="absolute bottom-0 left-1/2 h-[1px] w-full -translate-x-1/2 bg-border transition-all duration-500" />
+        <span className="absolute bottom-0 left-1/2 h-[1px] w-0 -translate-x-1/2 bg-[#FB8500] transition-all duration-500 group-hover/logo:w-full" />
       </div>
       <nav className="flex-1 space-y-1 p-3">
         {navItems.map((item) => (

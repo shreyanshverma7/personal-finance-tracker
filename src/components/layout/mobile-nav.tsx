@@ -30,8 +30,11 @@ export function MobileNav() {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="flex h-14 items-center justify-between border-b px-4 md:hidden">
-      <Logo />
+    <div className="relative flex h-14 items-center justify-between px-4 md:hidden">
+      <div className="group/logo">
+        <Logo />
+      </div>
+      <span className="absolute bottom-0 left-0 h-[1px] w-full bg-border" />
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger asChild>
           <Button variant="ghost" size="icon">
@@ -39,8 +42,10 @@ export function MobileNav() {
           </Button>
         </SheetTrigger>
         <SheetContent side="left" className="w-64 p-0">
-          <div className="flex h-14 items-center border-b px-4" onClick={() => setOpen(false)}>
+          <div className="group/logo relative flex h-14 items-center justify-center px-4" onClick={() => setOpen(false)}>
             <Logo />
+            <span className="absolute bottom-0 left-1/2 h-[1px] w-full -translate-x-1/2 bg-border transition-all duration-500" />
+            <span className="absolute bottom-0 left-1/2 h-[1px] w-0 -translate-x-1/2 bg-[#FB8500] transition-all duration-500 group-hover/logo:w-full" />
           </div>
           <nav className="flex-1 space-y-1 p-3">
             {navItems.map((item) => (
