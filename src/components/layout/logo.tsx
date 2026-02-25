@@ -6,7 +6,7 @@ export function Logo() {
       href="/dashboard"
       className="group flex items-baseline font-[family-name:var(--font-poppins)] text-2xl tracking-tight transition-all duration-300"
     >
-      <span className="font-light text-foreground group-hover:opacity-70 transition-all">
+      <span className="font-light text-foreground">
         my
       </span>
       <span className="font-semibold text-[#FB8500] ml-0.5 transition-all duration-500">
