@@ -84,7 +84,7 @@ export default function CategoriesPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Categories</h1>
+        <h1 className="text-2xl font-bold border-l-4 border-l-primary pl-3">Categories</h1>
         <Button onClick={() => setDialogOpen(true)}>
           <Plus className="mr-2 h-4 w-4" />
           Add Category

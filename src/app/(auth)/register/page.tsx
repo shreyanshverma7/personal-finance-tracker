@@ -7,7 +7,7 @@ export default function RegisterPage() {
     <Card>
       <CardHeader className="text-center">
         <CardTitle className="text-2xl">Create an account</CardTitle>
-        <CardDescription>Get started with Finance Tracker</CardDescription>
+        <CardDescription>Get started with myRupaiya</CardDescription>
       </CardHeader>
       <CardContent>
         <RegisterForm />

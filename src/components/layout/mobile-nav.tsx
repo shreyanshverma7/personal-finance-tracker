@@ -45,7 +45,7 @@ export function MobileNav() {
           <div className="group/logo relative flex h-14 items-center justify-center px-4" onClick={() => setOpen(false)}>
             <Logo />
             <span className="absolute bottom-0 left-1/2 h-[1px] w-full -translate-x-1/2 bg-border transition-all duration-500" />
-            <span className="absolute bottom-0 left-1/2 h-[1px] w-0 -translate-x-1/2 bg-[#FB8500] transition-all duration-500 group-hover/logo:w-full" />
+            <span className="absolute bottom-0 left-1/2 h-[1px] w-0 -translate-x-1/2 bg-primary transition-all duration-500 group-hover/logo:w-full" />
           </div>
           <nav className="flex-1 space-y-1 p-3">
             {navItems.map((item) => (
@@ -56,8 +56,8 @@ export function MobileNav() {
                 className={cn(
                   "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground",
                   pathname === item.href
-                    ? "bg-accent text-accent-foreground"
-                    : "text-muted-foreground"
+                    ? "text-primary"
+                    : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                 )}
               >
                 <item.icon className="h-4 w-4" />
