@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
@@ -17,6 +16,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
+import { Logo } from "@/components/layout/logo";
 
 const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -31,16 +31,7 @@ export function MobileNav() {
 
   return (
     <div className="flex h-14 items-center justify-between border-b px-4 md:hidden">
-      <Link href="/dashboard" className="flex items-center">
-        <Image
-          src="/images/myRupaiyalogo.png"
-          alt="myRupaiya"
-          width={110}
-          height={28}
-          className="object-contain"
-          priority
-        />
-      </Link>
+      <Logo />
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger asChild>
           <Button variant="ghost" size="icon">
@@ -48,15 +39,9 @@ export function MobileNav() {
           </Button>
         </SheetTrigger>
         <SheetContent side="left" className="w-64 p-0">
-          <Link href="/dashboard" onClick={() => setOpen(false)} className="flex h-14 items-center justify-center border-b px-4">
-            <Image
-              src="/images/myRupaiyalogo.png"
-              alt="myRupaiya"
-              width={110}
-              height={28}
-              className="object-contain"
-            />
-          </Link>
+          <div className="flex h-14 items-center border-b px-4" onClick={() => setOpen(false)}>
+            <Logo />
+          </div>
           <nav className="flex-1 space-y-1 p-3">
             {navItems.map((item) => (
               <Link
