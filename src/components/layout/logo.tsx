@@ -4,7 +4,7 @@ export function Logo() {
   return (
     <Link
       href="/dashboard"
-      className="group inline-flex items-baseline font-[family-name:var(--font-poppins)] text-2xl tracking-tight transition-all duration-300"
+      className="group inline-flex items-baseline font-(family-name:--font-poppins) text-2xl tracking-tight transition-all duration-300"
     >
       <span className="font-light text-foreground">
         my
