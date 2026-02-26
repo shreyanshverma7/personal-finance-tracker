@@ -1,9 +1,15 @@
 import Link from "next/link";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { RegisterForm } from "@/components/forms/register-form";
+import { ResetPasswordForm } from "@/components/forms/reset-password-form";
 import { Logo } from "@/components/layout/logo";
 
-export default function RegisterPage() {
+export default async function ResetPasswordPage({
+  params,
+}: {
+  params: Promise<{ token: string }>;
+}) {
+  const { token } = await params;
+
   return (
     <div className="space-y-6">
       <div className="text-center space-y-2">
@@ -12,15 +18,14 @@ export default function RegisterPage() {
       </div>
       <Card>
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl">Create an account</CardTitle>
-          <CardDescription>Get started with myRupaiya</CardDescription>
+          <CardTitle className="text-2xl">Reset your password</CardTitle>
+          <CardDescription>Enter your new password below</CardDescription>
         </CardHeader>
         <CardContent>
-          <RegisterForm />
+          <ResetPasswordForm token={token} />
           <p className="mt-4 text-center text-sm text-muted-foreground">
-            Already have an account?{" "}
             <Link href="/login" className="text-primary hover:underline">
-              Sign in
+              Back to login
             </Link>
           </p>
         </CardContent>

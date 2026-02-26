@@ -9,7 +9,7 @@ export function Logo() {
       <span className="font-light text-foreground">
         my
       </span>
-      <span className="font-semibold text-[#FB8500] ml-0.5 transition-all duration-500">
+      <span className="font-semibold text-primary ml-0.5 transition-all duration-500">
         Rupaiya
       </span>
     </Link>
