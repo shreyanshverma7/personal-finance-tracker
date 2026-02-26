@@ -3,11 +3,9 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import { toast } from "sonner";
-import { loginSchema, LoginInput } from "@/lib/validators";
+import { resetPasswordSchema, ResetPasswordInput } from "@/lib/validators";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -19,31 +17,33 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-export function LoginForm() {
+export function ResetPasswordForm({ token }: { token: string }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
-  const form = useForm<LoginInput>({
-    resolver: zodResolver(loginSchema),
-    defaultValues: { email: "", password: "" },
+  const form = useForm<ResetPasswordInput>({
+    resolver: zodResolver(resetPasswordSchema),
+    defaultValues: { password: "", confirmPassword: "" },
   });
 
-  async function onSubmit(data: LoginInput) {
+  async function onSubmit(data: ResetPasswordInput) {
     setLoading(true);
     try {
-      const result = await signIn("credentials", {
-        email: data.email,
-        password: data.password,
-        redirect: false,
+      const res = await fetch("/api/auth/reset-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token, password: data.password }),
       });
 
-      if (result?.error) {
-        toast.error("Invalid email or password");
+      const result = await res.json();
+
+      if (!res.ok) {
+        toast.error(result.error || "Failed to reset password");
         return;
       }
 
-      router.push("/dashboard");
-      router.refresh();
+      toast.success("Password reset successful");
+      router.push("/login");
     } catch {
       toast.error("Something went wrong");
     } finally {
@@ -56,23 +56,10 @@ export function LoginForm() {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <FormField
           control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
-                <Input placeholder="you@example.com" type="email" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Password</FormLabel>
+              <FormLabel>New Password</FormLabel>
               <FormControl>
                 <Input placeholder="••••••" type="password" {...field} />
               </FormControl>
@@ -80,16 +67,21 @@ export function LoginForm() {
             </FormItem>
           )}
         />
-        <div className="flex items-center justify-end">
-          <Link
-            href="/forgot-password"
-            className="text-sm text-primary hover:underline"
-          >
-            Forgot password?
-          </Link>
-        </div>
+        <FormField
+          control={form.control}
+          name="confirmPassword"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Confirm Password</FormLabel>
+              <FormControl>
+                <Input placeholder="••••••" type="password" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <Button type="submit" className="w-full" disabled={loading}>
-          {loading ? "Signing in..." : "Sign In"}
+          {loading ? "Resetting..." : "Reset password"}
         </Button>
       </form>
     </Form>

@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { RegisterForm } from "@/components/forms/register-form";
+import { ForgotPasswordForm } from "@/components/forms/forgot-password-form";
 import { Logo } from "@/components/layout/logo";
 
-export default function RegisterPage() {
+export default function ForgotPasswordPage() {
   return (
     <div className="space-y-6">
       <div className="text-center space-y-2">
@@ -12,13 +12,15 @@ export default function RegisterPage() {
       </div>
       <Card>
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl">Create an account</CardTitle>
-          <CardDescription>Get started with myRupaiya</CardDescription>
+          <CardTitle className="text-2xl">Forgot password?</CardTitle>
+          <CardDescription>
+            Enter your email and we&apos;ll send you a reset link
+          </CardDescription>
         </CardHeader>
         <CardContent>
-          <RegisterForm />
+          <ForgotPasswordForm />
           <p className="mt-4 text-center text-sm text-muted-foreground">
-            Already have an account?{" "}
+            Remember your password?{" "}
             <Link href="/login" className="text-primary hover:underline">
               Sign in
             </Link>
