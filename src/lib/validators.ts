@@ -23,6 +23,7 @@ export const transactionSchema = z.object({
   description: z.string().min(1, "Description is required"),
   type: z.enum(["INCOME", "EXPENSE"]),
   categoryId: z.string().min(1, "Category is required"),
+  accountId: z.string().optional(),
   notes: z.string().optional(),
 });
 
@@ -32,6 +33,7 @@ export const transactionFormSchema = z.object({
   description: z.string().min(1, "Description is required"),
   type: z.enum(["INCOME", "EXPENSE"]),
   categoryId: z.string().min(1, "Category is required"),
+  accountId: z.string().optional(),
   notes: z.string().optional(),
 });
 
@@ -40,6 +42,18 @@ export const categorySchema = z.object({
   type: z.enum(["INCOME", "EXPENSE"]),
   color: z.string().regex(/^#[0-9a-fA-F]{6}$/, "Invalid hex color"),
   icon: z.string().optional(),
+});
+
+export const accountSchema = z.object({
+  name: z.string().min(1, "Name is required").max(50, "Name is too long"),
+  type: z.enum(["BANK", "UPI", "CREDIT_CARD"]),
+  initialBalance: z.coerce.number(),
+});
+
+export const accountFormSchema = z.object({
+  name: z.string().min(1, "Name is required").max(50, "Name is too long"),
+  type: z.enum(["BANK", "UPI", "CREDIT_CARD"]),
+  initialBalance: z.number(),
 });
 
 export const forgotPasswordSchema = z.object({
@@ -60,5 +74,6 @@ export type LoginInput = z.infer<typeof loginSchema>;
 export type RegisterInput = z.infer<typeof registerSchema>;
 export type TransactionInput = z.infer<typeof transactionFormSchema>;
 export type CategoryInput = z.infer<typeof categorySchema>;
+export type AccountInput = z.infer<typeof accountFormSchema>;
 export type ForgotPasswordInput = z.infer<typeof forgotPasswordSchema>;
 export type ResetPasswordInput = z.infer<typeof resetPasswordSchema>;
