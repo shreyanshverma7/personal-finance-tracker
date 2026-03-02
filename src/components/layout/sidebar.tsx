@@ -7,6 +7,7 @@ import {
   LayoutDashboard,
   ArrowLeftRight,
   Tag,
+  Wallet,
   Settings,
   LogOut,
 } from "lucide-react";
@@ -19,6 +20,7 @@ const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/transactions", label: "Transactions", icon: ArrowLeftRight },
   { href: "/categories", label: "Categories", icon: Tag },
+  { href: "/accounts", label: "Accounts", icon: Wallet },
   { href: "/settings", label: "Settings", icon: Settings },
 ];
 

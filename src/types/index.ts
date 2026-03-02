@@ -35,3 +35,14 @@ export interface PaginatedResponse<T> {
   pageSize: number;
   totalPages: number;
 }
+
+export interface Account {
+  id: string;
+  userId: string;
+  name: string;
+  type: "BANK" | "UPI" | "CREDIT_CARD";
+  initialBalance: number;
+  currentBalance: number;
+  createdAt: string;
+  updatedAt: string;
+}
