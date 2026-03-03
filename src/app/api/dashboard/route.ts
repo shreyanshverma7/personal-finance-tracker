@@ -14,6 +14,41 @@ export async function GET() {
   const currentMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
   const currentMonthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);
 
+  // Fetch accounts with transactions for balance calculation
+  const accounts = await db.account.findMany({
+    where: { userId },
+    include: {
+      transactions: {
+        select: {
+          amount: true,
+          type: true,
+        },
+      },
+    },
+    orderBy: { name: "asc" },
+  });
+
+  // Calculate current balance for each account
+  const accountsWithBalance = accounts.map((account) => {
+    const income = account.transactions
+      .filter((t) => t.type === "INCOME")
+      .reduce((sum, t) => sum + t.amount, 0);
+
+    const expense = account.transactions
+      .filter((t) => t.type === "EXPENSE")
+      .reduce((sum, t) => sum + t.amount, 0);
+
+    const currentBalance = account.initialBalance + income - expense;
+
+    // Remove transactions from response
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { transactions, ...accountData } = account;
+    return {
+      ...accountData,
+      currentBalance,
+    };
+  });
+
   // All-time totals
   const allTransactions = await db.transaction.findMany({
     where: { userId },
@@ -115,5 +150,6 @@ export async function GET() {
     categoryBreakdown,
     monthlyTrend,
     recentTransactions,
+    accounts: accountsWithBalance,
   });
 }

@@ -6,6 +6,7 @@ import { Wallet, TrendingUp, TrendingDown, DollarSign, ArrowRight } from "lucide
 import { DashboardStats } from "@/types";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { StatsCard } from "./stats-card";
+import { AccountBalanceSection } from "./account-balance-section";
 import { SpendingPieChart } from "@/components/charts/spending-pie-chart";
 import { MonthlyTrendChart } from "@/components/charts/monthly-trend-chart";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -39,6 +40,19 @@ export function DashboardContent() {
               </CardHeader>
               <CardContent>
                 <Skeleton className="h-8 w-32" />
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {[...Array(4)].map((_, i) => (
+            <Card key={i}>
+              <CardHeader className="pb-2">
+                <Skeleton className="h-4 w-20" />
+                <Skeleton className="h-5 w-16 mt-1.5" />
+              </CardHeader>
+              <CardContent>
+                <Skeleton className="h-6 w-24" />
               </CardContent>
             </Card>
           ))}
@@ -81,6 +95,9 @@ export function DashboardContent() {
           className={stats.monthNet >= 0 ? "text-green-600" : "text-red-600"}
         />
       </div>
+
+      {/* Account Balances Section */}
+      <AccountBalanceSection accounts={stats.accounts} />
 
       <div className="grid gap-6 lg:grid-cols-2">
         <SpendingPieChart data={stats.categoryBreakdown} />
