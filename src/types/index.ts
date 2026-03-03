@@ -19,6 +19,7 @@ export interface DashboardStats {
   categoryBreakdown: CategoryBreakdown[];
   monthlyTrend: MonthlyTrend[];
   recentTransactions: TransactionWithCategory[];
+  accounts: Account[];
 }
 
 export interface CategoryBreakdown {
