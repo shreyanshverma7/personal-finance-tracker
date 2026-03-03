@@ -237,26 +237,36 @@ export function TransactionDialog({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Category</FormLabel>
-                  <Select onValueChange={field.onChange} value={field.value}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a category" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {categories.map((cat) => (
-                        <SelectItem key={cat.id} value={cat.id}>
-                          <span className="flex items-center gap-2">
-                            <span
-                              className="inline-block h-3 w-3 rounded-full"
-                              style={{ backgroundColor: cat.color }}
-                            />
-                            {cat.name}
-                          </span>
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  {categories.length === 0 ? (
+                    <div className="border rounded-md p-3 text-sm text-muted-foreground">
+                      No {selectedType.toLowerCase()} categories found.{" "}
+                      <Link href="/categories" className="text-primary hover:underline">
+                        Create a category
+                      </Link>{" "}
+                      first.
+                    </div>
+                  ) : (
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a category" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {categories.map((cat) => (
+                          <SelectItem key={cat.id} value={cat.id}>
+                            <span className="flex items-center gap-2">
+                              <span
+                                className="inline-block h-3 w-3 rounded-full"
+                                style={{ backgroundColor: cat.color }}
+                              />
+                              {cat.name}
+                            </span>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
                   <FormMessage />
                 </FormItem>
               )}
@@ -345,7 +355,7 @@ export function TransactionDialog({
               >
                 Cancel
               </Button>
-              <Button type="submit" disabled={loading}>
+              <Button type="submit" disabled={loading || accounts.length === 0 || categories.length === 0}>
                 {loading ? "Saving..." : isEditing ? "Update" : "Create"}
               </Button>
             </div>
