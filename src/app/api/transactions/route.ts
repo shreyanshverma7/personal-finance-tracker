@@ -40,7 +40,7 @@ export async function GET(req: NextRequest) {
   const [data, total] = await Promise.all([
     db.transaction.findMany({
       where,
-      include: { category: true },
+      include: { category: true, account: true },
       orderBy: { [sortBy]: sortOrder },
       skip: (page - 1) * pageSize,
       take: pageSize,
@@ -75,12 +75,23 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Category not found" }, { status: 400 });
     }
 
+    // Validate account exists and belongs to user
+    if (validated.accountId) {
+      const account = await db.account.findFirst({
+        where: { id: validated.accountId, userId: session.user.id },
+      });
+
+      if (!account) {
+        return NextResponse.json({ error: "Account not found" }, { status: 400 });
+      }
+    }
+
     const transaction = await db.transaction.create({
       data: {
         ...validated,
         userId: session.user.id,
       },
-      include: { category: true },
+      include: { category: true, account: true },
     });
 
     return NextResponse.json(transaction, { status: 201 });

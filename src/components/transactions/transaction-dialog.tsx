@@ -6,7 +6,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { Category } from "@prisma/client";
 import { transactionFormSchema, TransactionInput } from "@/lib/validators";
-import { TransactionWithCategory } from "@/types";
+import { TransactionWithCategory, Account } from "@/types";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -26,7 +27,9 @@ import {
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
@@ -46,6 +49,7 @@ export function TransactionDialog({
 }: TransactionDialogProps) {
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [accounts, setAccounts] = useState<Account[]>([]);
   const isEditing = !!transaction;
 
   const form = useForm<TransactionInput>({
@@ -56,6 +60,7 @@ export function TransactionDialog({
       description: "",
       type: "EXPENSE",
       categoryId: "",
+      accountId: "",
       notes: "",
     },
   });
@@ -71,6 +76,7 @@ export function TransactionDialog({
         description: transaction.description,
         type: transaction.type as "INCOME" | "EXPENSE",
         categoryId: transaction.categoryId,
+        accountId: transaction.accountId || "",
         notes: transaction.notes || "",
       });
     } else {
@@ -80,6 +86,7 @@ export function TransactionDialog({
         description: "",
         type: "EXPENSE",
         categoryId: "",
+        accountId: "",
         notes: "",
       });
     }
@@ -95,6 +102,18 @@ export function TransactionDialog({
     }
     if (open) fetchCategories();
   }, [selectedType, open]);
+
+  // Fetch accounts
+  useEffect(() => {
+    async function fetchAccounts() {
+      const res = await fetch("/api/accounts");
+      if (res.ok) {
+        const data = await res.json();
+        setAccounts(data);
+      }
+    }
+    if (open) fetchAccounts();
+  }, [open]);
 
   async function onSubmit(data: TransactionInput) {
     setLoading(true);
@@ -128,6 +147,19 @@ export function TransactionDialog({
       setLoading(false);
     }
   }
+
+  // Group accounts by type for organized dropdown
+  const accountsByType = {
+    BANK: accounts.filter((acc) => acc.type === "BANK"),
+    UPI: accounts.filter((acc) => acc.type === "UPI"),
+    CREDIT_CARD: accounts.filter((acc) => acc.type === "CREDIT_CARD"),
+  };
+
+  const typeLabels = {
+    BANK: "Bank Accounts",
+    UPI: "UPI Accounts",
+    CREDIT_CARD: "Credit Cards",
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -225,6 +257,48 @@ export function TransactionDialog({
                       ))}
                     </SelectContent>
                   </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="accountId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Account</FormLabel>
+                  {accounts.length === 0 ? (
+                    <div className="border rounded-md p-3 text-sm text-muted-foreground">
+                      No accounts found.{" "}
+                      <Link href="/accounts" className="text-primary hover:underline">
+                        Create an account
+                      </Link>{" "}
+                      first.
+                    </div>
+                  ) : (
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select an account" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {Object.entries(accountsByType).map(([type, accs]) => {
+                          if (accs.length === 0) return null;
+                          return (
+                            <SelectGroup key={type}>
+                              <SelectLabel>{typeLabels[type as keyof typeof typeLabels]}</SelectLabel>
+                              {accs.map((acc) => (
+                                <SelectItem key={acc.id} value={acc.id}>
+                                  {acc.name}
+                                </SelectItem>
+                              ))}
+                            </SelectGroup>
+                          );
+                        })}
+                      </SelectContent>
+                    </Select>
+                  )}
                   <FormMessage />
                 </FormItem>
               )}
