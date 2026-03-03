@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Category } from "@prisma/client";
 import { Pencil, Trash2, Plus } from "lucide-react";
-import { TransactionWithCategory, PaginatedResponse } from "@/types";
+import { TransactionWithCategoryAndAccount, PaginatedResponse } from "@/types";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -27,7 +27,7 @@ import { TransactionDialog } from "./transaction-dialog";
 import { DeleteTransactionDialog } from "./delete-transaction-dialog";
 
 export function TransactionList() {
-  const [data, setData] = useState<PaginatedResponse<TransactionWithCategory> | null>(null);
+  const [data, setData] = useState<PaginatedResponse<TransactionWithCategoryAndAccount> | null>(null);
   const [loading, setLoading] = useState(true);
   const [categories, setCategories] = useState<Category[]>([]);
   const [page, setPage] = useState(1);
@@ -39,7 +39,7 @@ export function TransactionList() {
   const [refreshKey, setRefreshKey] = useState(0);
 
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [editingTransaction, setEditingTransaction] = useState<TransactionWithCategory | null>(null);
+  const [editingTransaction, setEditingTransaction] = useState<TransactionWithCategoryAndAccount | null>(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [deletingId, setDeletingId] = useState("");
 
@@ -81,7 +81,7 @@ export function TransactionList() {
       .catch(() => {});
   }, []);
 
-  function handleEdit(transaction: TransactionWithCategory) {
+  function handleEdit(transaction: TransactionWithCategoryAndAccount) {
     setEditingTransaction(transaction);
     setDialogOpen(true);
   }
@@ -176,6 +176,7 @@ export function TransactionList() {
               </TableHead>
               <TableHead>Description</TableHead>
               <TableHead>Category</TableHead>
+              <TableHead>Account</TableHead>
               <TableHead
                 className="cursor-pointer text-right"
                 onClick={() => toggleSort("amount")}
@@ -188,13 +189,13 @@ export function TransactionList() {
           <TableBody>
             {loading ? (
               <TableRow>
-                <TableCell colSpan={5} className="text-center py-8">
+                <TableCell colSpan={6} className="text-center py-8">
                   Loading...
                 </TableCell>
               </TableRow>
             ) : data?.data.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
+                <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
                   No transactions found
                 </TableCell>
               </TableRow>
@@ -215,6 +216,15 @@ export function TransactionList() {
                     >
                       {t.category.name}
                     </Badge>
+                  </TableCell>
+                  <TableCell>
+                    {t.account ? (
+                      <Badge variant="secondary" className="text-xs">
+                        {t.account.name}
+                      </Badge>
+                    ) : (
+                      <span className="text-xs text-muted-foreground italic">No account</span>
+                    )}
                   </TableCell>
                   <TableCell
                     className={`text-right font-medium ${

@@ -137,6 +137,11 @@ export function DashboardContent() {
                         <Badge variant="outline" className="text-xs">
                           {t.category.name}
                         </Badge>
+                        {t.account && (
+                          <Badge variant="secondary" className="text-xs">
+                            {t.account.name}
+                          </Badge>
+                        )}
                       </div>
                     </div>
                   </div>

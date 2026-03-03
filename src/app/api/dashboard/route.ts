@@ -137,7 +137,7 @@ export async function GET() {
   // Recent transactions
   const recentTransactions = await db.transaction.findMany({
     where: { userId },
-    include: { category: true },
+    include: { category: true, account: true },
     orderBy: { date: "desc" },
     take: 5,
   });
