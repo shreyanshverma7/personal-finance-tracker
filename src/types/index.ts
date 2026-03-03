@@ -6,6 +6,11 @@ export interface TransactionWithCategory extends Transaction {
   category: Category;
 }
 
+export interface TransactionWithCategoryAndAccount extends Transaction {
+  category: Category;
+  account: Account | null;
+}
+
 export interface DashboardStats {
   totalBalance: number;
   monthIncome: number;

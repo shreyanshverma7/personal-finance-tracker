@@ -7,7 +7,7 @@ import { transactionSchema } from "@/lib/validators";
 async function getTransaction(id: string, userId: string) {
   return db.transaction.findFirst({
     where: { id, userId },
-    include: { category: true },
+    include: { category: true, account: true },
   });
 }
 
@@ -56,10 +56,21 @@ export async function PUT(
       return NextResponse.json({ error: "Category not found" }, { status: 400 });
     }
 
+    // Validate account exists and belongs to user
+    if (validated.accountId) {
+      const account = await db.account.findFirst({
+        where: { id: validated.accountId, userId: session.user.id },
+      });
+
+      if (!account) {
+        return NextResponse.json({ error: "Account not found" }, { status: 400 });
+      }
+    }
+
     const transaction = await db.transaction.update({
       where: { id },
       data: validated,
-      include: { category: true },
+      include: { category: true, account: true },
     });
 
     return NextResponse.json(transaction);
