@@ -72,7 +72,7 @@ Copy `.env.example` to `.env`. Required variables:
 
 ## Phase 2 (Deferred)
 
-Account model, budget tracking UI, data export.
+Budget tracking UI, data export.
 
 ## Additional Documentation
 
