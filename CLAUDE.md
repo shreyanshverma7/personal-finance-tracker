@@ -70,12 +70,15 @@ Copy `.env.example` to `.env`. Required variables:
 - `NEXTAUTH_SECRET` — Session encryption key
 - `NEXTAUTH_URL` — App URL (default: `http://localhost:3000`)
 
-## Phase 2 (Deferred)
+## Phase 3 (Next)
 
 Budget tracking UI, data export.
 
-## Additional Documentation
+## Global Rules
 
-Check these files for detailed patterns when modifying the codebase:
-
-- **`.claude/docs/architectural_patterns.md`** — API route structure, form patterns, auth flow, data fetching, component composition, database conventions, theming setup
+Behavioral rules live in `~/.claude/rules/` and apply automatically:
+- `git-workflow.md` — branch naming, commits, PR process
+- `agents.md` — when to invoke each agent proactively
+- `no-docs.md` — never create documentation .md files
+- `coding-style.md` — immutability, file size, TypeScript standards
+- `security.md` — mandatory security checklist, API route pattern
